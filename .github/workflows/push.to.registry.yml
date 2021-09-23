@@ -8,11 +8,13 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
 
     steps:
       - name: Checkout GitHub Actions
         uses: actions/checkout@main
-        working-directory: ./api
 
       - name: Login via Azure CLI
         uses: azure/login@v1
