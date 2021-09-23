@@ -1,0 +1,34 @@
+name: build and deploy to registry
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout GitHub Actions
+      uses: actions/checkout@main
+      working-directory: ./api
+
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+   - name: Login to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: acrmydemoregistry.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+     
+     
+    - name: Build and push container image to registry 
+      run: |
+        docker build . -t acrmydemoregistry.azurecr.io/demo-app:${{ github.sha }}
+        docker push acrmydemoregistry.azurecr.io/demo-app:${{ github.sha }}
