@@ -1,4 +1,6 @@
 FROM node:14.15.4-alpine as builder
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL ${REACT_APP_API_URL}
 WORKDIR /usr/app
 COPY package*.json ./
 RUN npm install
